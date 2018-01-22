@@ -10,7 +10,7 @@ import UIKit
 import Speech
 import AVFoundation
 
-class MainVC: UIViewController {
+class MainVC: UIViewController, AVAudioPlayerDelegate {
 
     @IBOutlet weak var activitySpinner: UIActivityIndicatorView!
     @IBOutlet weak var transcriptionTxtField: UITextView!
@@ -22,16 +22,23 @@ class MainVC: UIViewController {
         
         activitySpinner.isHidden = true
     }
+    
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        player.stop()
+        activitySpinner.stopAnimating()
+        activitySpinner.isHidden = true
+    }
 
     func requestSpeechAuth() {
         SFSpeechRecognizer.requestAuthorization {
             authStatus in
             
             if authStatus == SFSpeechRecognizerAuthorizationStatus.authorized {
-                if let path = Bundle.main.url(forResource: "text", withExtension: "m4a"){
+                if let path = Bundle.main.url(forResource: "text", withExtension: ".m4a"){
                     do{
                         let sound = try AVAudioPlayer(contentsOf: path)
                         self.audioPlayer = sound
+                        self.audioPlayer.delegate = self
                         sound.play()
                     }
                     catch{
@@ -47,7 +54,7 @@ class MainVC: UIViewController {
                             print("Error: \(error)")
                         }
                         else {
-                            print(result?.bestTranscription.formattedString)
+                            self.transcriptionTxtField.text = result?.bestTranscription.formattedString
                         }
                     }
                 }
@@ -56,7 +63,10 @@ class MainVC: UIViewController {
     }
     
     @IBAction func playBtnPressed(_ sender: Any) {
+        activitySpinner.isHidden = false
+        activitySpinner.startAnimating()
         
+        requestSpeechAuth()
     }
     
 }
