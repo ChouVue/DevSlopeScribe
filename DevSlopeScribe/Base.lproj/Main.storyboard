@@ -54,6 +54,9 @@
                                         <real key="value" value="30"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="playBtnPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="epT-uu-nji"/>
+                                </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Tapped button to transcribe audio embedded in the app..." textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="3rf-bv-kx5">
                                 <rect key="frame" x="20" y="70" width="374" height="534"/>
